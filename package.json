@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/vishal035/learning-mongoDB/issues"
   },
-  "homepage": "https://github.com/vishal035/learning-mongoDB#readme"
+  "homepage": "https://github.com/vishal035/learning-mongoDB#readme",
+  "dependencies": {
+    "mongodb": "^3.6.3"
+  }
 }
