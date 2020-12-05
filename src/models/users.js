@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcrypt');
 
-
-const user = mongoose.model('User', {
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -12,7 +12,7 @@ const user = mongoose.model('User', {
         type: Number,
         default: 0,
         validate: {
-            validator(value){
+            validator(value) {
                 if (value < 0) {
                     throw new Error("Age should be Positive..!")
                 }
@@ -41,15 +41,28 @@ const user = mongoose.model('User', {
         trim: true,
         validate: {
             validator(value) {
-                if (value.toLowerCase().includes('password')){
+                if (value.toLowerCase().includes('password')) {
                     throw new Error('Password not contain \"password\" word');
                 }
-        },
-        message: () => `Check You Password`
+            },
+            message: () => `Check You Password`
         }
     }
-});
+})
+
+userSchema.pre('save', async function (next) {
+    const user = this
+
+    if(user.isModified('password')){
+        user.password = await bcrypt.hash(user.password, 10)
+    }
+
+    console.log("Just Before saving users");
+
+    next()
+})
+
+const user = mongoose.model('User', userSchema);
 
 
 module.exports = user;
-

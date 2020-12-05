@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/vishal035/learning-mongoDB#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "express": "^4.17.1",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.3",
