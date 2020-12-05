@@ -6,13 +6,18 @@ const user = mongoose.model('User', {
     name: {
         type: String,
         required: true,
+        trim: true,
     },
     age: {
         type: Number,
-        validator(value) {
-            if (value < 0) {
-                throw new Error("Age should be Positive..!")
-            }
+        default: 0,
+        validate: {
+            validator(value){
+                if (value < 0) {
+                    throw new Error("Age should be Positive..!")
+                }
+            },
+            message: props => `'${props.value}' is not a valid age`
         }
     },
     email: {
@@ -20,10 +25,13 @@ const user = mongoose.model('User', {
         required: true,
         trim: true,
         lowercase: true,
-        validator(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error("Email is invalid")
-            }
+        validate: {
+            validator(value) {
+                if (!validator.isEmail(value)) {
+                    throw new Error("Email is invalid")
+                }
+            },
+            message: props => `'${props.value}' is not a valid E-mail`
         }
     },
     password: {
@@ -31,10 +39,13 @@ const user = mongoose.model('User', {
         required: true,
         minlength: 7,
         trim: true,
-        validator(value) {
+        validate: {
+            validator(value) {
                 if (value.toLowerCase().includes('password')){
-                    throw new Error('Password not contain "password" word');
+                    throw new Error('Password not contain \"password\" word');
                 }
+        },
+        message: () => `Check You Password`
         }
     }
 });
