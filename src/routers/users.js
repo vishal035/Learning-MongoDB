@@ -3,25 +3,15 @@ const User = require('../models/users');
 const router = new express.Router();
 
 
-router.post('/users/login', async (req, res) => {
+router.post('/users/login', async (req,res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
-        res.send( user )
-    } catch (e) {
-        console.log('-Login Error:', e)
-        res.status(400).send()
+        res.send(user)
+    } catch (error) {
+        console.log(error);
+        res.status(400).send(error)
     }
 })
-
-// router.post('/users/login', async (req,res) => {
-//     try {
-//         const user = await User.findByCredentials(req.body.email, req.body.password)
-//         res.send(user)
-//     } catch (error) {
-//         console.log(error);
-//         res.status(400).send(error)
-//     }
-// })
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body)
@@ -106,7 +96,7 @@ router.delete('/users/:id', async (req, res) => {
 
         res.send(`${user}\nUser removed`)
     } catch (error) {
-        res.status(500).send()
+        res.status(500).send(error)
     }
 })
 

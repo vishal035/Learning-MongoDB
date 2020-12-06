@@ -51,39 +51,22 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-userSchema.statics.findByCredentials = async (email, password) => {
-    const user = await User.findOne({ email: email })
-    if (!user) {
-        throw new Error('Unable to login')
+
+userSchema.statics.findByCredentials = async (email, password) =>{
+    const user = await User.findOne({email})
+
+    if(!user){
+        throw new Error("User not found by the provided credentials")
     }
-    console.log('-User:', user)
-    console.log('-Password:', password) 
-    console.log('-Hash Password:', user.password)
-   
+
     const isMatch = await bcrypt.compare(password, user.password)
 
-    if (!isMatch) {
-        throw new Error('Unable to login')
+    if(!isMatch){
+        throw new Error("User not found by the provided credentials")
     }
 
     return user
 }
-
-// userSchema.statics.findByCredentials = async (email, password) =>{
-//     const user = await User.findOne({email})
-
-//     if(!user){
-//         throw new Error("User not found by the provided credentials")
-//     }
-
-//     const isMatch = await bcrypt.compare(password, user.password)
-
-//     if(!isMatch){
-//         throw new Error("User not found by the provided credentials")
-//     }
-
-//     return user
-// }
 
 //Hash the user password before saving
 userSchema.pre('save', async function (next) {
