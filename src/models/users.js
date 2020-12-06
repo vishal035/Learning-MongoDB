@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -48,20 +49,39 @@ const userSchema = new mongoose.Schema({
             },
             message: () => `Check You Password`
         }
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 })
 
+userSchema.methods.generateAuthToken = async function () {
+    const user = this
 
-userSchema.statics.findByCredentials = async (email, password) =>{
-    const user = await User.findOne({email})
+    const token = jwt.sign({
+        _id: user._id.toString()
+    }, 'thisismysceret')
 
-    if(!user){
+    user.tokens = user.tokens.concat({token})
+    await user.save()
+    return token
+}
+
+userSchema.statics.findByCredentials = async (email, password) => {
+    const user = await User.findOne({
+        email
+    })
+
+    if (!user) {
         throw new Error("User not found by the provided credentials")
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
 
-    if(!isMatch){
+    if (!isMatch) {
         throw new Error("User not found by the provided credentials")
     }
 
@@ -72,7 +92,7 @@ userSchema.statics.findByCredentials = async (email, password) =>{
 userSchema.pre('save', async function (next) {
     const user = this
 
-    if(user.isModified('password')){
+    if (user.isModified('password')) {
         user.password = await bcrypt.hash(user.password, 10)
     }
 
