@@ -73,7 +73,7 @@ router.get('/users/:id', async (req, res) => {
 })
 
 
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/me', auth,async (req, res) => {
 
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'age', 'email', 'password']
@@ -88,18 +88,11 @@ router.patch('/users/:id', async (req, res) => {
 
     try {
 
-        const user = await User.findById(req.params.id)
-
-        updates.forEach((update) => user[update] = req.body[update])
-        await user.save()
-
+        // const user = await User.findById(req.params.id)
+        updates.forEach((update) => req.user[update] = req.body[update])
+        await req.user.save()
         // const user = await User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
-
-        if (!user) {
-            return res.status(404).send()
-        }
-
-        res.send(user)
+        res.send(req.user)
 
     } catch (error) {
         res.status(400).send(error)
@@ -107,17 +100,17 @@ router.patch('/users/:id', async (req, res) => {
 })
 
 
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users/me', auth,async (req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.params.id)
+        // const user = await User.findByIdAndDelete(req.user._id)
 
-        if (!user) {
-            return res.status(404).send({
-                "error": "User Does not exists!"
-            })
-        }
-
-        res.send(`${user}\nUser removed`)
+        // if (!user) {
+        //     return res.status(404).send({
+        //         "error": "User Does not exists!"
+        //     })
+        // }
+        await req.user.remove()
+        res.send(`User removed\n${req.user}`)
     } catch (error) {
         res.status(500).send(error)
     }

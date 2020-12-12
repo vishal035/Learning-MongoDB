@@ -39,3 +39,13 @@ app.listen(port, () => {
 // }
 
 // myFunction()
+
+// const pet = {
+//     name: "kiti"
+// }
+
+// pet.toJSON  = function() {
+//     return {name: "Dog"}
+// }
+
+// console.log(JSON.stringify(pet));
