@@ -60,8 +60,6 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-console.log('Error from User Model');
-
 userSchema.virtual('tasks', {
   ref: 'Task',
   localField: '_id',
