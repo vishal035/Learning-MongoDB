@@ -1,7 +1,29 @@
 const express = require('express');
+const multer = require('multer');
 const User = require('../models/users');
 const router = new express.Router();
 const auth = require('../middleware/auth');
+
+const upload = multer({
+  dest: 'images',
+  limits: {
+    fileSize: 20000000,
+  },
+  fileFilter(req, file, cb) {
+    if (
+      !file.originalname.match(
+        /\.(webp|gif|png|jpg|jpeg|jpe|jif|jfif|jfi|jp2|j2k|jpf|jpx|jpm|mj2|svg|svgz)$/
+      )
+    ) {
+      return cb(new Error('Please upload a correct Image'));
+    }
+    cb(undefined, true);
+
+    // cb(new Error('File Must be a image..!'));
+    // cb(undefined, true);
+    // cb(undefined, false);
+  },
+});
 
 router.post('/users/login', async (req, res) => {
   try {
@@ -56,6 +78,18 @@ router.post('/users', async (req, res) => {
 router.get('/users/me', auth, async (req, res) => {
   res.send(req.user);
 });
+
+router.post(
+  '/users/me/avatar',
+  auth,
+  upload.single('upload'),
+  async function (req, res) {
+    res.send('Profile Picture is added...');
+  },
+  (error, req, res, next) => {
+    res.status(400).send({ error: error.message });
+  }
+);
 
 router.patch('/users/me', auth, async (req, res) => {
   const updates = Object.keys(req.body);

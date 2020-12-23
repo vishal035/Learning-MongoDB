@@ -5,6 +5,7 @@
 
 ### Node ###
 # Logs
+images
 logs
 *.log
 npm-debug.log*
