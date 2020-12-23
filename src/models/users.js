@@ -92,7 +92,7 @@ userSchema.methods.generateAuthToken = async function () {
     {
       _id: user._id.toString(),
     },
-    'thisismysceret'
+    process.env.JWTSCERETLOCK
   );
 
   user.tokens = user.tokens.concat({ token });

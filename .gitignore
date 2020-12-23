@@ -5,6 +5,8 @@
 
 ### Node ###
 # Logs
+bin
+config
 images
 logs
 *.log
