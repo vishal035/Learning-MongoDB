@@ -2,6 +2,7 @@
   "name": "task-manager",
   "version": "1.0.0",
   "description": "\"# learning-mongoDB\"",
+  "private": "true",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon src/app.js",
