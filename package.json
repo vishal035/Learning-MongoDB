@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "env-cmd --file ./config/dev.env nodemon src/app.js",
     "start": "node src/app.js",
-    "test": "jest"
+    "test": "env-cmd --file ./config/test.env jest --detectOpenHandles --update-snapshot --watch"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
@@ -32,6 +35,7 @@
   "devDependencies": {
     "env-cmd": "^10.1.0",
     "jest": "^26.6.3",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "supertest": "^6.1.1"
   }
 }
