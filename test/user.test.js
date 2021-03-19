@@ -33,6 +33,10 @@ test('Should Signup a user', async () => {
 //     .expect(200);
 // });
 
+// test('Should Logout All The Users', async () => {
+//   await request(app).post('/users/logoutAll').send().expect(200);
+// });
+
 test('Should Not Login', async () => {
   await request(app)
     .post('/users/login')
