@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const app = require('../src/index');
 const User = require('../src/models/users');
+const { response, use } = require('../src/index');
 
 const userOneId = new mongoose.Types.ObjectId();
 
@@ -49,10 +50,13 @@ test('Should Signup a user', async () => {
 });
 
 // test('User Should Login', async () => {
-//   await request(app)
+//   const responce = await request(app)
 //     .post('/users/login')
 //     .send({ email: userOne.email, password: userOne.password })
 //     .expect(200);
+
+// Axpecting Token to be saved in DB
+//   expect(userOne.tokens[0].token).toBe(responce.body.token);
 // });
 
 // test('Should Logout All The Users', async () => {
@@ -79,17 +83,18 @@ test('Shiould not get the profile without tokens', async () => {
 });
 
 test('Should Not Delete signed in user Account', async () => {
-  await request(app)
-    .delete('/users/me')
-    // .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
-    .send()
-    .expect(401);
+  await request(app).delete('/users/me').send().expect(401);
 });
 
 test('Should Delete signed in user Account', async () => {
-  await request(app)
+  const responce = await request(app)
     .delete('/users/me')
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send()
     .expect(200);
+
+  // User Should be Deleted From The DB
+
+  const user = await User.findById(userOneId);
+  expect(user).toBeNull();
 });
