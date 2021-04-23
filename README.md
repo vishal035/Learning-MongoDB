@@ -6,10 +6,11 @@ The first User has to create or log in to view or create any task he owns. All t
 user can also upload their profile image.
 
 
-
 To run this project follow these commands
 Make sure you have your own sendgrid api key and jwt sceret word ready in .env file
-//After cloning the directory,
+
+
+```node
 
 ---For Dev Server
 cd learning-express-mongoDB && npm i && npm run dev
@@ -17,6 +18,6 @@ cd learning-express-mongoDB && npm i && npm run dev
 --For Testing
 npm run test
 
-
+```
 
 For Testing the functionality of the API I have used jest and supertest
